@@ -20,6 +20,8 @@ jobs:
     - run: npm install
     - run: npm run build --if-present
     - run: npm test
+    - run: "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+
     - name: Deploy to Heroku
       env:
         HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
