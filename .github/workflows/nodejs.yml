@@ -26,6 +26,7 @@ jobs:
       env:
         HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
         HEROKU_APP_NAME: 'lit-harbor-80470'
+      run: echo "RUNNING"
     - name: Login
       uses: "actions/heroku@master"
       args: "container:login"
