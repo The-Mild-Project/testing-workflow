@@ -26,5 +26,18 @@ jobs:
       env:
         HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
         HEROKU_APP_NAME: 'lit-harbor-80470'
-      if: github.ref == 'refs/heads/master' && job.status == 'success'
-      run: git push https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git origin/master:master --force
+      steps:
+      - name: "login"
+        uses: "actions/heroku@master"
+        args: "container:login"
+        secrets: $HEROKU_API_TOKEN
+      - name: "push"
+        uses: "actions/heroku@master"
+        needs: "login"
+        args: "container:push -a lit-harbor-80470 web"
+        secrets: $HEROKU_API_TOKEN
+      - name: "release"
+          uses: "actions/heroku@master"
+          needs: "push"
+          args: "container:release -a lit-harbor-80470 web"
+          secrets: $HEROKU_API_KEY
